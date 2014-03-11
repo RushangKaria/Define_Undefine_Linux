@@ -1,0 +1,47 @@
+# UNDEFINE COMMAND FOR LINUX
+# PLEASE RUN THIS PROGRAM AS ROOT
+
+error()
+{
+	echo $1
+}
+
+ROOT=/var/define.log
+
+if [ "$1" != "" ] && [ "$1" != "all" ]; then
+for VAR in $@
+do
+X=$(grep $VAR $ROOT)
+
+   if [ "$X" == "" ]; then
+	error "$VAR command non-existent"
+	continue
+   fi
+
+#echo $X
+rm -f $X
+sed -i "/$VAR/d" $ROOT
+echo "$VAR successfully undefined"
+done
+exit 1
+fi
+
+while read line
+ do
+  #echo $line
+  rm -f $line
+done < $ROOT
+
+cat > $ROOT << "EOF"
+EOF
+
+echo "ALL COMMANDS SUCCESSFULLY UNDEFINED"
+exit 1
+
+################ PRACTICE LOOP ################
+#for i in $@		This loop was
+#do 			used to experiment.
+#echo $i
+#done
+##############################################
+

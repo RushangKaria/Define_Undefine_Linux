@@ -1,0 +1,45 @@
+# The DEFINE COMMAND FOR INTELLIGENT UNIX
+# Please run this program as root user only
+
+error()
+{
+echo $1
+exit 1
+}
+
+DIR=$(find  /bin -name $2)  
+ROOT=/bin
+#echo $DIR
+
+if [ "$DIR" == "" ] 2>/dev/null; then
+DIR=$(find /usr/bin -name $2)
+ROOT=/usr/bin
+
+	if [ "$DIR" == "" ] 2>/dev/null; then
+	error "Please enter a VALID UNIX COMMAND"
+	fi
+fi
+
+DEFND=$(find /usr/bin /bin -name $1)
+
+if [ "$DEFND" != "" ]; then
+error "ERROR...COMMAND ALREADY IN USE"
+fi
+
+#echo $ROOT
+
+ln -sf $DIR $ROOT/$1 
+
+CHECK=$(find $ROOT -name $1)
+
+if [ "$CHECK" != "" ]; then
+echo "Command successfully defined"
+else
+error "ERROR...NEED TO BE ROOT"
+fi
+
+echo "$ROOT/$1" >> /var/define.log
+
+exit 1
+
+
